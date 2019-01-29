@@ -1,0 +1,39 @@
+{
+  "name": "@bkrith/multilevel",
+  "version": "1.0.0",
+  "description": "server/client implementation for levelDB database",
+  "main": "index.js",
+  "keywords": [
+    "leveldb",
+    "level",
+    "multilevel",
+    "levelup",
+    "rpc",
+    "stream",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "start": "nodemon --watch '**/*.ts' --exec 'ts-node' index.ts",
+    "test": "nodemon --watch '**/*.ts' --exec 'ts-node' test.ts",
+    "build": "tsc",
+    "docs": "./node_modules/.bin/typedoc --out ./docs ./src",
+    "lint": "eslint src --ext ts"
+  },
+  "author": "Vassilis",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "eslint": "^5.12.1",
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.1",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.2.4",
+    "typescript-eslint-parser": "^21.0.2"
+  },
+  "dependencies": {
+    "level": "^4.0.0",
+    "uuid-v4": "^0.1.0"
+  }
+}
