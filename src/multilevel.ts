@@ -50,7 +50,7 @@ export class MultiLevel extends EventEmitter {
         return this._valueStream;
     }
 
-    set db(module: any) {
+    set levelModule(module: any) {
         this._db = module;
         this._stream = new TransformStream(this._db);
     }

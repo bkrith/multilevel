@@ -13,7 +13,7 @@ export declare class MultiLevel extends EventEmitter {
     readonly readStream: EventEmitter;
     readonly keyStream: EventEmitter;
     readonly valueStream: EventEmitter;
-    db: any;
+    levelModule: any;
     level(path: string, options?: any, cb?: any): void;
     listen(options?: Partial<OptionsInterface>): void;
     connect(options?: Partial<OptionsInterface>): void;
