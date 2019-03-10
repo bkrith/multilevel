@@ -3,7 +3,7 @@
 
 import * as net from 'net';
 import { OptionsInterface, PacketInterface, } from './interfaces';
-import { jsBinary } from './jsBinary';
+import { binary } from './binary';
 import { TransformStream } from './stream';
 import { EventEmitter } from 'events';
 
@@ -26,9 +26,9 @@ export class MultiLevel extends EventEmitter {
         if (!netOptions) netOptions = {} as OptionsInterface;
         this._options = {} as OptionsInterface;
 
-        this._options.maxConnections = netOptions.maxConnections || 10;
+        this._options.maxConnections = netOptions.maxConnections || 1000;
         this._options.address = netOptions.address || 'localhost';
-        this._options.port = netOptions.port || 22500;
+        this._options.port = netOptions.port || 3600;
 
         this._socket = {} as net.Socket;
 
@@ -64,6 +64,7 @@ export class MultiLevel extends EventEmitter {
         this.setOptions(options);
 
         const onClientConnected = (socket: net.Socket) => {
+            this._stream = new TransformStream(this._db);
             this._socket = socket;
             this.socketEvents(this._socket);
             this.emit('client', this._socket);
@@ -86,9 +87,9 @@ export class MultiLevel extends EventEmitter {
         this.setOptions(options);
 
         this._socket = new net.Socket();
-        this._stream = new TransformStream(undefined, this);
 
         this._socket.connect(this._options.port, this._options.address, () => {
+            this._stream = new TransformStream(undefined, this);
             this.socketEvents(this._socket);
             this.emit('connect', this._socket);
             this._socket.pipe(this._stream);
@@ -119,10 +120,23 @@ export class MultiLevel extends EventEmitter {
         });
 
         socket.on('close', () => {
+            this._readStream.removeAllListeners();
+            this._keyStream.removeAllListeners();
+            this._valueStream.removeAllListeners();
             this.emit('close', socket);
         });
 
+        socket.on('end', () => {
+            this._readStream.removeAllListeners();
+            this._keyStream.removeAllListeners();
+            this._valueStream.removeAllListeners();
+            this.emit('end', socket);
+        });
+
         socket.on('error', (err: Error) => {
+            this._readStream.removeAllListeners();
+            this._keyStream.removeAllListeners();
+            this._valueStream.removeAllListeners();
             this.emit('error', err);
         });
     }
@@ -139,7 +153,7 @@ export class MultiLevel extends EventEmitter {
                 }
             };
 
-            this._socket.write(jsBinary.packet.encode(packet));
+            this._socket.write(binary.packet.encode(packet));
 
             this.once(packet.id, (result, err) => {
                 if (err) reject(err);
@@ -158,10 +172,11 @@ export class MultiLevel extends EventEmitter {
                 }
             };
 
-            this._socket.write(jsBinary.packet.encode(packet));
+            this._socket.write(binary.packet.encode(packet));
 
             this.once(packet.id, (result, err) => {
-                if (err) reject(err);
+                // Non exist Key returns error
+                if (err) resolve(false);
                 else resolve(result);
             });
         });
@@ -177,7 +192,7 @@ export class MultiLevel extends EventEmitter {
                 }
             };
 
-            this._socket.write(jsBinary.packet.encode(packet));
+            this._socket.write(binary.packet.encode(packet));
 
             this.once(packet.id, (result, err) => {
                 if (err) reject(err);
@@ -196,7 +211,7 @@ export class MultiLevel extends EventEmitter {
                 }
             };
 
-            this._socket.write(jsBinary.packet.encode(packet));
+            this._socket.write(binary.packet.encode(packet));
 
             this.once(packet.id, (result, err) => {
                 if (err) reject(err);
@@ -215,7 +230,7 @@ export class MultiLevel extends EventEmitter {
                 }
             };
 
-            this._socket.write(jsBinary.packet.encode(packet));
+            this._socket.write(binary.packet.encode(packet));
 
             this.once(packet.id, (result, err) => {
                 if (err) reject(err);
@@ -234,7 +249,7 @@ export class MultiLevel extends EventEmitter {
                 }
             };
 
-            this._socket.write(jsBinary.packet.encode(packet));
+            this._socket.write(binary.packet.encode(packet));
 
             this.once(packet.id, (result, err) => {
                 if (err) reject(err);
@@ -252,7 +267,7 @@ export class MultiLevel extends EventEmitter {
             }
         };
 
-        this._socket.write(jsBinary.packet.encode(packet));
+        this._socket.write(binary.packet.encode(packet));
 
         return this._readStream;
     }
@@ -266,7 +281,7 @@ export class MultiLevel extends EventEmitter {
             }
         };
 
-        this._socket.write(jsBinary.packet.encode(packet));
+        this._socket.write(binary.packet.encode(packet));
 
         return this._keyStream;
     }
@@ -280,7 +295,7 @@ export class MultiLevel extends EventEmitter {
             }
         };
 
-        this._socket.write(jsBinary.packet.encode(packet));
+        this._socket.write(binary.packet.encode(packet));
 
         return this._valueStream;
     }
