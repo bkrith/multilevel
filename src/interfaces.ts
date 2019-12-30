@@ -1,6 +1,8 @@
 
 'use strict';
 
+import { EventEmitter } from 'events';
+
 export interface OptionsInterface {
     address: string;
     port: number;
@@ -18,4 +20,8 @@ export interface DataInterface {
     result?: any;
     error?: any;
     end?: boolean;
+}
+
+export interface StreamInterface {
+    [index: string]: EventEmitter;
 }

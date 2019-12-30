@@ -2,7 +2,7 @@
 'use strict';
 
 import * as net from 'net';
-import { OptionsInterface, PacketInterface, } from './interfaces';
+import { OptionsInterface, PacketInterface, StreamInterface, } from './interfaces';
 import { binary } from './binary';
 import { TransformStream } from './stream';
 import { EventEmitter } from 'events';
@@ -16,9 +16,9 @@ export class MultiLevel extends EventEmitter {
     private _socket: net.Socket;
     private _db: any;
     private _stream: TransformStream;
-    private _readStreams: Map<string, EventEmitter>;
-    private _keyStreams: Map<string, EventEmitter>;
-    private _valueStreams: Map<string, EventEmitter>;
+    private _readStreams: StreamInterface;
+    private _keyStreams: StreamInterface;
+    private _valueStreams: StreamInterface;
 
     constructor(netOptions?: Partial<OptionsInterface>) {
         super();
@@ -34,24 +34,38 @@ export class MultiLevel extends EventEmitter {
 
         this._stream = {} as TransformStream;
 
-        this._readStreams = new Map();
-        this._keyStreams = new Map();
-        this._valueStreams = new Map();
+        this._readStreams = {} as StreamInterface;
+        this._keyStreams = {} as StreamInterface;
+        this._valueStreams = {} as StreamInterface;
     }
 
     readStream(id: string): EventEmitter {
-        const strm = this._readStreams.get(id);
-        return strm ? strm : new EventEmitter();
+        return this._readStreams[id];
     }
 
     keyStream(id: string): EventEmitter {
-        const strm = this._keyStreams.get(id);
-        return strm ? strm : new EventEmitter();
+        return this._keyStreams[id];
     }
 
     valueStream(id: string): EventEmitter {
-        const strm = this._valueStreams.get(id);
-        return strm ? strm : new EventEmitter();
+        return this._valueStreams[id];
+    }
+
+    deleteStream(stream: string, key: string) {
+        switch (stream) {
+            case 'read':
+                this._readStreams[key].removeAllListeners();
+                delete this._readStreams[key];
+                break;
+            case 'key':
+                this._keyStreams[key].removeAllListeners();
+                delete this._keyStreams[key];
+                break;
+            case 'value':
+                this._valueStreams[key].removeAllListeners();
+                delete this._valueStreams[key];
+                break;
+        }
     }
 
     set levelModule(module: any) {
@@ -124,23 +138,50 @@ export class MultiLevel extends EventEmitter {
         });
 
         socket.on('close', () => {
-            this._readStreams.forEach((stream) => stream.removeAllListeners());
-            this._keyStreams.forEach((stream) => stream.removeAllListeners());
-            this._valueStreams.forEach((stream) => stream.removeAllListeners());
+            Object.keys(this._readStreams).forEach((key) => {
+                this._readStreams[key].removeAllListeners();
+                this.deleteStream('read', key);
+            });
+            Object.keys(this._keyStreams).forEach((key) => {
+                this._keyStreams[key].removeAllListeners();
+                this.deleteStream('key', key);
+            });
+            Object.keys(this._valueStreams).forEach((key) => {
+                this._valueStreams[key].removeAllListeners();
+                this.deleteStream('value', key);
+            });
             this.emit('close', socket);
         });
 
         socket.on('end', () => {
-            this._readStreams.forEach((stream) => stream.removeAllListeners());
-            this._keyStreams.forEach((stream) => stream.removeAllListeners());
-            this._valueStreams.forEach((stream) => stream.removeAllListeners());
+            Object.keys(this._readStreams).forEach((key) => {
+                this._readStreams[key].removeAllListeners();
+                this.deleteStream('read', key);
+            });
+            Object.keys(this._keyStreams).forEach((key) => {
+                this._keyStreams[key].removeAllListeners();
+                this.deleteStream('key', key);
+            });
+            Object.keys(this._valueStreams).forEach((key) => {
+                this._valueStreams[key].removeAllListeners();
+                this.deleteStream('value', key);
+            });
             this.emit('end', socket);
         });
 
         socket.on('error', (err: Error) => {
-            this._readStreams.forEach((stream) => stream.removeAllListeners());
-            this._keyStreams.forEach((stream) => stream.removeAllListeners());
-            this._valueStreams.forEach((stream) => stream.removeAllListeners());
+            Object.keys(this._readStreams).forEach((key) => {
+                this._readStreams[key].removeAllListeners();
+                this.deleteStream('read', key);
+            });
+            Object.keys(this._keyStreams).forEach((key) => {
+                this._keyStreams[key].removeAllListeners();
+                this.deleteStream('key', key);
+            });
+            Object.keys(this._valueStreams).forEach((key) => {
+                this._valueStreams[key].removeAllListeners();
+                this.deleteStream('value', key);
+            });
             this.emit('error', err);
         });
     }
@@ -273,9 +314,9 @@ export class MultiLevel extends EventEmitter {
 
         this._socket.write(binary.packet.encode(packet));
 
-        this._readStreams.set(packet.id, new EventEmitter());
+        this._readStreams[packet.id] = new EventEmitter();
 
-        return this._readStreams.get(packet.id);
+        return this._readStreams[packet.id];
     }
 
     createKeyStream(options?: any): EventEmitter | undefined {
@@ -289,9 +330,9 @@ export class MultiLevel extends EventEmitter {
 
         this._socket.write(binary.packet.encode(packet));
 
-        this._keyStreams.set(packet.id, new EventEmitter());
+        this._keyStreams[packet.id] = new EventEmitter();
 
-        return this._keyStreams.get(packet.id);
+        return this._keyStreams[packet.id];
     }
 
     createValueStream(options?: any): EventEmitter | undefined {
@@ -305,9 +346,9 @@ export class MultiLevel extends EventEmitter {
 
         this._socket.write(binary.packet.encode(packet));
 
-        this._valueStreams.set(packet.id, new EventEmitter());
+        this._valueStreams[packet.id] = new EventEmitter();
 
-        return this._valueStreams.get(packet.id);
+        return this._valueStreams[packet.id];
     }
 
     // ------------------------- End DB Commands -------------------------

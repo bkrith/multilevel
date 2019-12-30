@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@bkrith/multilevel</title>
+	<title>@bkrith/multilevel - v1.2.0</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">@bkrith/multilevel</a>
+					<a href="index.html" class="title">@bkrith/multilevel - v1.2.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> @bkrith/multilevel</h1>
+			<h1> @bkrith/multilevel - v1.2.0</h1>
 		</div>
 	</div>
 </header>
@@ -64,11 +64,17 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="multilevel">multilevel</h1>
+				<a href="#multilevel" id="multilevel" style="color: inherit; text-decoration: none;">
+					<h1>multilevel</h1>
+				</a>
 				<p>Expose a levelDB over the network, to be used by multiple process.</p>
-				<h2 id="installing">Installing</h2>
+				<a href="#installing" id="installing" style="color: inherit; text-decoration: none;">
+					<h2>Installing</h2>
+				</a>
 				<pre><code class="language-bash">npm install @bkrith/multilevel</code></pre>
-				<h2 id="usage">Usage</h2>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
 				<p>Create a Server and start listening:</p>
 				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> multilevel = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@bkrith/multilevel'</span>);
 
@@ -96,12 +102,16 @@ db.get(<span class="hljs-string">'foo'</span>)
 });</code></pre>
 				<p>And at last you can close the connection and the database:</p>
 				<pre><code class="language-javascript">db.stop();</code></pre>
-				<h3 id="select-level-module">Select level module</h3>
+				<a href="#select-level-module" id="select-level-module" style="color: inherit; text-decoration: none;">
+					<h3>Select level module</h3>
+				</a>
 				<p>By default multilevel use level module:</p>
 				<pre><code class="language-javascript">db.level(location[, options[, callback]]);</code></pre>
 				<p>But you can change through &quot;levelModule&quot; the database instance, for example:</p>
 				<pre><code class="language-javascript">db.levelModule = levelup(leveldown(<span class="hljs-string">'./myDB'</span>));</code></pre>
-				<h3 id="tcp-socket">TCP Socket</h3>
+				<a href="#tcp-socket" id="tcp-socket" style="color: inherit; text-decoration: none;">
+					<h3>TCP Socket</h3>
+				</a>
 				<p>You have access on TCP Socket events:</p>
 				<pre><code class="language-javascript"><span class="hljs-comment">// Server side connection</span>
 db.on(<span class="hljs-string">'connect'</span>, (socket) =&gt; {
@@ -130,7 +140,9 @@ db.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
 });
 </code></pre>
 				<p>Notice: Event &#39;data&#39; returns Buffer object which is coded and not processed yet by the stream.</p>
-				<h2 id="level-api">level API</h2>
+				<a href="#level-api" id="level-api" style="color: inherit; text-decoration: none;">
+					<h2>level API</h2>
+				</a>
 				<p>For options specific to [<code>leveldown</code>][leveldown] and [<code>level-js</code>][level-js] (&quot;underlying store&quot; from here on out), please see their respective READMEs.</p>
 				<ul>
 					<li><a href="#ctor"><code><b>level()</b></code></a></li>
@@ -145,7 +157,9 @@ db.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
 					<li><a href="#createValueStream"><code>db.<b>createValueStream()</b></code></a></li>
 				</ul>
 				<p><a name="ctor"></a></p>
-				<h3 id="db-level-location-options-"><code>db.level(location[, options])</code></h3>
+				<a href="#codedblevellocation-optionscode" id="codedblevellocation-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.level(location[, options])</code></h3>
+				</a>
 				<p>The main entry point for creating a new <code>levelup</code> instance.</p>
 				<ul>
 					<li><code>location</code> is a string pointing to the LevelDB location to be opened or in browsers, the name of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase"><code>IDBDatabase</code></a> to be opened.</li>
@@ -161,14 +175,18 @@ db.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
 })</code></pre>
 				<p>Note that <code>createIfMissing</code> is an option specific to [<code>leveldown</code>][leveldown].</p>
 				<p><a name="put"></a></p>
-				<h3 id="db-put-key-value-options-"><code>db.put(key, value[, options])</code></h3>
+				<a href="#codedbputkey-value-optionscode" id="codedbputkey-value-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.put(key, value[, options])</code></h3>
+				</a>
 				<p><code>put()</code> is the primary method for inserting data into the store. Both <code>key</code> and <code>value</code> can be of any type as far as <code>levelup</code> is concerned.</p>
 				<ul>
 					<li><code>options</code> is passed on to the underlying store</li>
 					<li><code>options.keyEncoding</code> and <code>options.valueEncoding</code> are passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key- and/or value encoding for this <code>put</code> operation.</li>
 				</ul>
 				<p><a name="get"></a></p>
-				<h3 id="db-get-key-options-"><code>db.get(key[, options])</code></h3>
+				<a href="#codedbgetkey-optionscode" id="codedbgetkey-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.get(key[, options])</code></h3>
+				</a>
 				<p><code>get()</code> is the primary method for fetching data from the store. The <code>key</code> can be of any type. If it doesn&#39;t exist in the store then the promise will receive an error. </p>
 				<pre><code class="language-js">db.get(<span class="hljs-string">'foo'</span>)
 .then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
@@ -183,7 +201,9 @@ db.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
 					<li><code>options.keyEncoding</code> and <code>options.valueEncoding</code> are passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key- and/or value encoding for this <code>get</code> operation.</li>
 				</ul>
 				<p><a name="del"></a></p>
-				<h3 id="db-del-key-options-"><code>db.del(key[, options])</code></h3>
+				<a href="#codedbdelkey-optionscode" id="codedbdelkey-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.del(key[, options])</code></h3>
+				</a>
 				<p><code>del()</code> is the primary method for removing data from the store.</p>
 				<pre><code class="language-js">db.del(<span class="hljs-string">'foo'</span>)
 .catch((err) {
@@ -195,7 +215,9 @@ db.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
 					<li><code>options.keyEncoding</code> is passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key encoding for this <code>del</code> operation.</li>
 				</ul>
 				<p><a name="batch"></a></p>
-				<h3 id="db-batch-array-options-array-form-"><code>db.batch(array[, options])</code> <em>(array form)</em></h3>
+				<a href="#codedbbatcharray-optionscode-emarray-formem" id="codedbbatcharray-optionscode-emarray-formem" style="color: inherit; text-decoration: none;">
+					<h3><code>db.batch(array[, options])</code> <em>(array form)</em></h3>
+				</a>
 				<p><code>batch()</code> can be used for very fast bulk-write operations (both <em>put</em> and <em>delete</em>). The <code>array</code> argument should contain a list of operations to be executed sequentially, although as a whole they are performed as an atomic operation inside the underlying store.</p>
 				<p>Each operation is contained in an object having the following properties: <code>type</code>, <code>key</code>, <code>value</code>, where the <em>type</em> is either <code>&#39;put&#39;</code> or <code>&#39;del&#39;</code>. In the case of <code>&#39;del&#39;</code> the <code>value</code> property is ignored. Any entries with a <code>key</code> of <code>null</code> or <code>undefined</code> will cause an error to be returned on the <code>callback</code> and any <code>type: &#39;put&#39;</code> entry with a <code>value</code> of <code>null</code> or <code>undefined</code> will return an error.</p>
 				<pre><code class="language-js"><span class="hljs-keyword">var</span> ops = [
@@ -218,7 +240,9 @@ db.batch(ops)
 					<li><code>options.keyEncoding</code> and <code>options.valueEncoding</code> are passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key- and/or value encoding of operations in this batch.</li>
 				</ul>
 				<p><a name="isOpen"></a></p>
-				<h3 id="db-isopen-"><code>db.isOpen()</code></h3>
+				<a href="#codedbisopencode" id="codedbisopencode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.isOpen()</code></h3>
+				</a>
 				<p>A <code>levelup</code> instance can be in one of the following states:</p>
 				<ul>
 					<li><em>&quot;new&quot;</em>     - newly created, not opened or closed</li>
@@ -229,10 +253,14 @@ db.batch(ops)
 				</ul>
 				<p><code>isOpen()</code> will return <code>true</code> as promise only when the state is &quot;open&quot;.</p>
 				<p><a name="isClosed"></a></p>
-				<h3 id="db-isclosed-"><code>db.isClosed()</code></h3>
+				<a href="#codedbisclosedcode" id="codedbisclosedcode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.isClosed()</code></h3>
+				</a>
 				<p><code>isClosed()</code> will return <code>true</code> as promise only when the state is &quot;closing&quot; <em>or</em> &quot;closed&quot;, it can be useful for determining if read and write operations are permissible.</p>
 				<p><a name="createReadStream"></a></p>
-				<h3 id="db-createreadstream-options-"><code>db.createReadStream([options])</code></h3>
+				<a href="#codedbcreatereadstreamoptionscode" id="codedbcreatereadstreamoptionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.createReadStream([options])</code></h3>
+				</a>
 				<p>Returns a <a href="https://nodejs.org/docs/latest/api/stream.html#stream_readable_streams">Readable Stream</a> of key-value pairs. A pair is an object with <code>key</code> and <code>value</code> properties. By default it will stream all entries in the underlying store from start to end. Use the options described below to control the range, direction and results.</p>
 				<pre><code class="language-js">db.createReadStream()
   .on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
@@ -271,7 +299,9 @@ db.batch(ops)
 				</ul>
 				<p>Underlying stores may have additional options.</p>
 				<p><a name="createKeyStream"></a></p>
-				<h3 id="db-createkeystream-options-"><code>db.createKeyStream([options])</code></h3>
+				<a href="#codedbcreatekeystreamoptionscode" id="codedbcreatekeystreamoptionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.createKeyStream([options])</code></h3>
+				</a>
 				<p>Returns a <a href="https://nodejs.org/docs/latest/api/stream.html#stream_readable_streams">Readable Stream</a> of keys rather than key-value pairs. Use the same options as described for <a href="#createReadStream"><code>createReadStream</code></a> to control the range and direction.</p>
 				<p>You can also obtain this stream by passing an options object to <code>createReadStream()</code> with <code>keys</code> set to <code>true</code> and <code>values</code> set to <code>false</code>. The result is equivalent; both streams operate in <a href="https://nodejs.org/docs/latest/api/stream.html#stream_object_mode">object mode</a>.</p>
 				<pre><code class="language-js">db.createKeyStream()
@@ -285,7 +315,9 @@ db.createReadStream({ <span class="hljs-attr">keys</span>: <span class="hljs-lit
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'key='</span>, data)
   })</code></pre>
 				<p><a name="createValueStream"></a></p>
-				<h3 id="db-createvaluestream-options-"><code>db.createValueStream([options])</code></h3>
+				<a href="#codedbcreatevaluestreamoptionscode" id="codedbcreatevaluestreamoptionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.createValueStream([options])</code></h3>
+				</a>
 				<p>Returns a <a href="https://nodejs.org/docs/latest/api/stream.html#stream_readable_streams">Readable Stream</a> of values rather than key-value pairs. Use the same options as described for <a href="#createReadStream"><code>createReadStream</code></a> to control the range and direction.</p>
 				<p>You can also obtain this stream by passing an options object to <code>createReadStream()</code> with <code>values</code> set to <code>true</code> and <code>keys</code> set to <code>false</code>. The result is equivalent; both streams operate in <a href="https://nodejs.org/docs/latest/api/stream.html#stream_object_mode">object mode</a>.</p>
 				<pre><code class="language-js">db.createValueStream()
@@ -298,11 +330,15 @@ db.createReadStream({ <span class="hljs-attr">keys</span>: <span class="hljs-lit
   .on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'value='</span>, data)
   })</code></pre>
-				<h2 id="author">Author</h2>
+				<a href="#author" id="author" style="color: inherit; text-decoration: none;">
+					<h2>Author</h2>
+				</a>
 				<ul>
 					<li><strong>Vassilis Kritharakis</strong> - <em>Initial work</em> - <a href="https://github.com/bkrith">bkrith</a></li>
 				</ul>
-				<h2 id="licenses">Licenses</h2>
+				<a href="#licenses" id="licenses" style="color: inherit; text-decoration: none;">
+					<h2>Licenses</h2>
+				</a>
 				<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details</p>
 			</div>
 		</div>
@@ -313,16 +349,16 @@ db.createReadStream({ <span class="hljs-attr">keys</span>: <span class="hljs-lit
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_binary_.html">"binary"</a>
+						<a href="modules/_binary_.html">&quot;binary&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_interfaces_.html">"interfaces"</a>
+						<a href="modules/_interfaces_.html">&quot;interfaces&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_multilevel_.html">"multilevel"</a>
+						<a href="modules/_multilevel_.html">&quot;multilevel&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_stream_.html">"stream"</a>
+						<a href="modules/_stream_.html">&quot;stream&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -345,6 +381,7 @@ db.createReadStream({ <span class="hljs-attr">keys</span>: <span class="hljs-lit
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -393,7 +430,7 @@ db.createReadStream({ <span class="hljs-attr">keys</span>: <span class="hljs-lit
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>

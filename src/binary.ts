@@ -4,14 +4,29 @@
 import { PacketInterface } from './interfaces';
 
 const deserializeBuffer = (json: any): any => {
-    Object.keys(json).forEach((key) => {
-        if (json[key] && json[key].type && json[key].type === 'Buffer') {
-            json[key] = Buffer.from(json[key].data);
+    if (json !== undefined) {
+        if (json.type && json.data && json.type === 'Buffer') {
+            json = Buffer.from(json.data);
         }
-        else if (json[key] && typeof(json[key]) === 'object' && Object.keys(json[key]).length) {
-            json[key] = deserializeBuffer(json[key]);
+        else if (json.type && json.data && json.type === 'bigint') {
+            json = BigInt(json.data);
         }
-    });
+        else {
+            Object.keys(json).forEach((key) => {
+                if (json[key] !== undefined) {
+                    if (json[key].type && json[key].type === 'Buffer') {
+                        json[key] = Buffer.from(json[key].data);
+                    }
+                    else if (json[key].type && json[key].type === 'bigint') {
+                        json[key] = BigInt(json[key].data);
+                    }
+                    else if (typeof (json[key]) === 'object' && Object.keys(json[key]).length) {
+                        json[key] = deserializeBuffer(json[key]);
+                    }
+                }
+            });
+        }
+    }
 
     return json;
 };

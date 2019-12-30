@@ -13,7 +13,8 @@ export declare class MultiLevel extends EventEmitter {
     readStream(id: string): EventEmitter;
     keyStream(id: string): EventEmitter;
     valueStream(id: string): EventEmitter;
-    levelModule: any;
+    deleteStream(stream: string, key: string): void;
+    set levelModule(module: any);
     level(path: string, options?: any, cb?: any): void;
     listen(options?: Partial<OptionsInterface>): void;
     connect(options?: Partial<OptionsInterface>): void;
