@@ -45,19 +45,19 @@ export class TransformStream extends Transform {
                         if (packet.data.method.includes('Stream')) {
                             switch (packet.data.method) {
                                 case 'createReadStream':
-                                    if (packet.data.result) events.readStream.emit('data', packet.data.result);
-                                    else if (packet.data.end) events.readStream.emit('end');
-                                    else if (packet.data.error) events.readStream.emit('error', packet.data.error);
+                                    if (packet.data.result) events.readStream(packet.id).emit('data', packet.data.result);
+                                    else if (packet.data.end) events.readStream(packet.id).emit('end');
+                                    else if (packet.data.error) events.readStream(packet.id).emit('error', packet.data.error);
                                     break;
                                 case 'createKeyStream':
-                                    if (packet.data.result) events.keyStream.emit('data', packet.data.result);
-                                    else if (packet.data.end) events.keyStream.emit('end');
-                                    else if (packet.data.error) events.keyStream.emit('error', packet.data.error);
+                                    if (packet.data.result) events.keyStream(packet.id).emit('data', packet.data.result);
+                                    else if (packet.data.end) events.keyStream(packet.id).emit('end');
+                                    else if (packet.data.error) events.keyStream(packet.id).emit('error', packet.data.error);
                                     break;
                                 case 'createValueStream':
-                                    if (packet.data.result) events.valueStream.emit('data', packet.data.result);
-                                    else if (packet.data.end) events.valueStream.emit('end');
-                                    else if (packet.data.error) events.valueStream.emit('error', packet.data.error);
+                                    if (packet.data.result) events.valueStream(packet.id).emit('data', packet.data.result);
+                                    else if (packet.data.end) events.valueStream(packet.id).emit('end');
+                                    else if (packet.data.error) events.valueStream(packet.id).emit('error', packet.data.error);
                                     break;
                             }
                         }

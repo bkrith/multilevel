@@ -6,13 +6,13 @@ export declare class MultiLevel extends EventEmitter {
     private _socket;
     private _db;
     private _stream;
-    private _readStream;
-    private _keyStream;
-    private _valueStream;
+    private _readStreams;
+    private _keyStreams;
+    private _valueStreams;
     constructor(netOptions?: Partial<OptionsInterface>);
-    readonly readStream: EventEmitter;
-    readonly keyStream: EventEmitter;
-    readonly valueStream: EventEmitter;
+    readStream(id: string): EventEmitter;
+    keyStream(id: string): EventEmitter;
+    valueStream(id: string): EventEmitter;
     levelModule: any;
     level(path: string, options?: any, cb?: any): void;
     listen(options?: Partial<OptionsInterface>): void;
@@ -26,7 +26,7 @@ export declare class MultiLevel extends EventEmitter {
     batch(batch: any, options?: any): Promise<any>;
     isOpen(): Promise<any>;
     isClosed(): Promise<any>;
-    createReadStream(options?: any): EventEmitter;
-    createKeyStream(options?: any): EventEmitter;
-    createValueStream(options?: any): EventEmitter;
+    createReadStream(options?: any): EventEmitter | undefined;
+    createKeyStream(options?: any): EventEmitter | undefined;
+    createValueStream(options?: any): EventEmitter | undefined;
 }
