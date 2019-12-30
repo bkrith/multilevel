@@ -303,7 +303,7 @@ export class MultiLevel extends EventEmitter {
         });
     }
 
-    createReadStream(options?: any): EventEmitter | undefined {
+    createReadStream(options?: any): EventEmitter {
         const packet: PacketInterface = {
             id: uuid(),
             data: {
@@ -319,7 +319,7 @@ export class MultiLevel extends EventEmitter {
         return this._readStreams[packet.id];
     }
 
-    createKeyStream(options?: any): EventEmitter | undefined {
+    createKeyStream(options?: any): EventEmitter {
         const packet: PacketInterface = {
             id: uuid(),
             data: {
@@ -335,7 +335,7 @@ export class MultiLevel extends EventEmitter {
         return this._keyStreams[packet.id];
     }
 
-    createValueStream(options?: any): EventEmitter | undefined {
+    createValueStream(options?: any): EventEmitter {
         const packet: PacketInterface = {
             id: uuid(),
             data: {

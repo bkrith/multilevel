@@ -27,7 +27,7 @@ export declare class MultiLevel extends EventEmitter {
     batch(batch: any, options?: any): Promise<any>;
     isOpen(): Promise<any>;
     isClosed(): Promise<any>;
-    createReadStream(options?: any): EventEmitter | undefined;
-    createKeyStream(options?: any): EventEmitter | undefined;
-    createValueStream(options?: any): EventEmitter | undefined;
+    createReadStream(options?: any): EventEmitter;
+    createKeyStream(options?: any): EventEmitter;
+    createValueStream(options?: any): EventEmitter;
 }
