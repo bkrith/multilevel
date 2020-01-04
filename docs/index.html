@@ -1,0 +1,439 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@bkrith/multilevel - v1.2.3</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@bkrith/multilevel - v1.2.3</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> @bkrith/multilevel - v1.2.3</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#multilevel" id="multilevel" style="color: inherit; text-decoration: none;">
+					<h1>multilevel</h1>
+				</a>
+				<p>Expose a levelDB over the network, to be used by multiple process.</p>
+				<a href="#installing" id="installing" style="color: inherit; text-decoration: none;">
+					<h2>Installing</h2>
+				</a>
+				<pre><code class="language-bash">npm install @bkrith/multilevel</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<p>Create a Server and start listening:</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> multilevel = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@bkrith/multilevel'</span>);
+
+<span class="hljs-keyword">const</span> db = <span class="hljs-keyword">new</span> multilevel();
+
+db.level(<span class="hljs-string">'./myDB'</span>);
+
+db.listen({ <span class="hljs-attr">port</span>: <span class="hljs-number">22500</span> });</code></pre>
+				<p>Connect from the client and use all the leveldb commands as promises:</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> multilevel = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@bkrith/multilevel'</span>);
+
+<span class="hljs-keyword">const</span> db = <span class="hljs-keyword">new</span> multilevel();
+
+db.connect({
+    <span class="hljs-attr">address</span>: <span class="hljs-string">'127.0.0.1'</span>,
+    <span class="hljs-attr">port</span>: <span class="hljs-number">22500</span>
+});
+
+db.get(<span class="hljs-string">'foo'</span>)
+.then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(value);
+})
+.catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(err);
+});</code></pre>
+				<p>And at last you can close the connection and the database:</p>
+				<pre><code class="language-javascript">db.stop();</code></pre>
+				<a href="#select-level-module" id="select-level-module" style="color: inherit; text-decoration: none;">
+					<h3>Select level module</h3>
+				</a>
+				<p>By default multilevel use level module:</p>
+				<pre><code class="language-javascript">db.level(location[, options[, callback]]);</code></pre>
+				<p>But you can change through &quot;levelModule&quot; the database instance, for example:</p>
+				<pre><code class="language-javascript">db.levelModule = levelup(leveldown(<span class="hljs-string">'./myDB'</span>));</code></pre>
+				<a href="#tcp-socket" id="tcp-socket" style="color: inherit; text-decoration: none;">
+					<h3>TCP Socket</h3>
+				</a>
+				<p>You have access on TCP Socket events:</p>
+				<pre><code class="language-javascript"><span class="hljs-comment">// Server side connection</span>
+db.on(<span class="hljs-string">'connect'</span>, (socket) =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'client connected'</span>, socket.remoteAddress, <span class="hljs-string">':'</span>, socket.remotePort);
+});
+
+db.on(<span class="hljs-string">'listen'</span>, (port) =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'listen on'</span>, port);
+});
+
+<span class="hljs-comment">// Client side connection</span>
+db.on(<span class="hljs-string">'client'</span>, (socket) =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'connected on Server'</span>, socket.remoteAddress, <span class="hljs-string">':'</span>, socket.remotePort);
+});
+
+db.on(<span class="hljs-string">'close'</span>, (socket) =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'close'</span>);
+});
+
+db.on(<span class="hljs-string">'error'</span>, (err) =&gt; {
+    <span class="hljs-built_in">console</span>.log(err);
+});
+
+db.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
+  <span class="hljs-built_in">console</span>.log(data);
+});
+</code></pre>
+				<p>Notice: Event &#39;data&#39; returns Buffer object which is coded and not processed yet by the stream.</p>
+				<a href="#level-api" id="level-api" style="color: inherit; text-decoration: none;">
+					<h2>level API</h2>
+				</a>
+				<p>For options specific to [<code>leveldown</code>][leveldown] and [<code>level-js</code>][level-js] (&quot;underlying store&quot; from here on out), please see their respective READMEs.</p>
+				<ul>
+					<li><a href="#ctor"><code><b>level()</b></code></a></li>
+					<li><a href="#put"><code>db.<b>put()</b></code></a></li>
+					<li><a href="#get"><code>db.<b>get()</b></code></a></li>
+					<li><a href="#del"><code>db.<b>del()</b></code></a></li>
+					<li><a href="#batch"><code>db.<b>batch()</b></code></a> <em>(array form)</em></li>
+					<li><a href="#isOpen"><code>db.<b>isOpen()</b></code></a></li>
+					<li><a href="#isClosed"><code>db.<b>isClosed()</b></code></a></li>
+					<li><a href="#createReadStream"><code>db.<b>createReadStream()</b></code></a></li>
+					<li><a href="#createKeyStream"><code>db.<b>createKeyStream()</b></code></a></li>
+					<li><a href="#createValueStream"><code>db.<b>createValueStream()</b></code></a></li>
+				</ul>
+				<p><a name="ctor"></a></p>
+				<a href="#codedblevellocation-optionscode" id="codedblevellocation-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.level(location[, options])</code></h3>
+				</a>
+				<p>The main entry point for creating a new <code>levelup</code> instance.</p>
+				<ul>
+					<li><code>location</code> is a string pointing to the LevelDB location to be opened or in browsers, the name of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase"><code>IDBDatabase</code></a> to be opened.</li>
+					<li><code>options</code> is passed on to the underlying store.</li>
+					<li><code>options.keyEncoding</code> and <code>options.valueEncoding</code> are passed to [<code>encoding-down</code>][encoding-down], default encoding is <code>&#39;utf8&#39;</code></li>
+				</ul>
+				<p>Calling <code>db.level(&#39;my-db&#39;)</code> will also open the underlying store. This is an asynchronous operation which return a promise. </p>
+				<p>The constructor function has a <code>.errors</code> property which provides access to the different error types from <a href="https://github.com/Level/errors#api"><code>level-errors</code></a>. See example below on how to use it:</p>
+				<pre><code class="language-js">db.level(<span class="hljs-string">'my-db'</span>, { <span class="hljs-attr">createIfMissing</span>: <span class="hljs-literal">false</span> }, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, db</span>) </span>{
+  <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> level.errors.OpenError) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'failed to open database'</span>)
+  }
+})</code></pre>
+				<p>Note that <code>createIfMissing</code> is an option specific to [<code>leveldown</code>][leveldown].</p>
+				<p><a name="put"></a></p>
+				<a href="#codedbputkey-value-optionscode" id="codedbputkey-value-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.put(key, value[, options])</code></h3>
+				</a>
+				<p><code>put()</code> is the primary method for inserting data into the store. Both <code>key</code> and <code>value</code> can be of any type as far as <code>levelup</code> is concerned.</p>
+				<ul>
+					<li><code>options</code> is passed on to the underlying store</li>
+					<li><code>options.keyEncoding</code> and <code>options.valueEncoding</code> are passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key- and/or value encoding for this <code>put</code> operation.</li>
+				</ul>
+				<p><a name="get"></a></p>
+				<a href="#codedbgetkey-optionscode" id="codedbgetkey-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.get(key[, options])</code></h3>
+				</a>
+				<p><code>get()</code> is the primary method for fetching data from the store. The <code>key</code> can be of any type. If it doesn&#39;t exist in the store then the promise will receive an error. </p>
+				<pre><code class="language-js">db.get(<span class="hljs-string">'foo'</span>)
+.then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+
+  <span class="hljs-comment">// .. handle `value` here</span>
+})
+.catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+  <span class="hljs-comment">// Do something with error</span>
+});</code></pre>
+				<ul>
+					<li><code>options</code> is passed on to the underlying store.</li>
+					<li><code>options.keyEncoding</code> and <code>options.valueEncoding</code> are passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key- and/or value encoding for this <code>get</code> operation.</li>
+				</ul>
+				<p><a name="del"></a></p>
+				<a href="#codedbdelkey-optionscode" id="codedbdelkey-optionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.del(key[, options])</code></h3>
+				</a>
+				<p><code>del()</code> is the primary method for removing data from the store.</p>
+				<pre><code class="language-js">db.del(<span class="hljs-string">'foo'</span>)
+.catch((err) {
+  <span class="hljs-keyword">if</span> (err)
+    <span class="hljs-comment">// handle I/O or other error</span>
+});</code></pre>
+				<ul>
+					<li><code>options</code> is passed on to the underlying store.</li>
+					<li><code>options.keyEncoding</code> is passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key encoding for this <code>del</code> operation.</li>
+				</ul>
+				<p><a name="batch"></a></p>
+				<a href="#codedbbatcharray-optionscode-emarray-formem" id="codedbbatcharray-optionscode-emarray-formem" style="color: inherit; text-decoration: none;">
+					<h3><code>db.batch(array[, options])</code> <em>(array form)</em></h3>
+				</a>
+				<p><code>batch()</code> can be used for very fast bulk-write operations (both <em>put</em> and <em>delete</em>). The <code>array</code> argument should contain a list of operations to be executed sequentially, although as a whole they are performed as an atomic operation inside the underlying store.</p>
+				<p>Each operation is contained in an object having the following properties: <code>type</code>, <code>key</code>, <code>value</code>, where the <em>type</em> is either <code>&#39;put&#39;</code> or <code>&#39;del&#39;</code>. In the case of <code>&#39;del&#39;</code> the <code>value</code> property is ignored. Any entries with a <code>key</code> of <code>null</code> or <code>undefined</code> will cause an error to be returned on the <code>callback</code> and any <code>type: &#39;put&#39;</code> entry with a <code>value</code> of <code>null</code> or <code>undefined</code> will return an error.</p>
+				<pre><code class="language-js"><span class="hljs-keyword">var</span> ops = [
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">'del'</span>, <span class="hljs-attr">key</span>: <span class="hljs-string">'father'</span> },
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">'put'</span>, <span class="hljs-attr">key</span>: <span class="hljs-string">'name'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">'Yuri Irsenovich Kim'</span> },
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">'put'</span>, <span class="hljs-attr">key</span>: <span class="hljs-string">'dob'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">'16 February 1941'</span> },
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">'put'</span>, <span class="hljs-attr">key</span>: <span class="hljs-string">'spouse'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">'Kim Young-sook'</span> },
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">'put'</span>, <span class="hljs-attr">key</span>: <span class="hljs-string">'occupation'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">'Clown'</span> }
+]
+
+db.batch(ops)
+.then(<span class="hljs-function">(<span class="hljs-params">ok</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Great success dear leader!'</span>)
+})
+.catch((err) {
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Ooops!'</span>, err);
+});</code></pre>
+				<ul>
+					<li><code>options</code> is passed on to the underlying store.</li>
+					<li><code>options.keyEncoding</code> and <code>options.valueEncoding</code> are passed to [<code>encoding-down</code>][encoding-down], allowing you to override the key- and/or value encoding of operations in this batch.</li>
+				</ul>
+				<p><a name="isOpen"></a></p>
+				<a href="#codedbisopencode" id="codedbisopencode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.isOpen()</code></h3>
+				</a>
+				<p>A <code>levelup</code> instance can be in one of the following states:</p>
+				<ul>
+					<li><em>&quot;new&quot;</em>     - newly created, not opened or closed</li>
+					<li><em>&quot;opening&quot;</em> - waiting for the underlying store to be opened</li>
+					<li><em>&quot;open&quot;</em>    - successfully opened the store, available for use</li>
+					<li><em>&quot;closing&quot;</em> - waiting for the store to be closed</li>
+					<li><em>&quot;closed&quot;</em>  - store has been successfully closed, should not be used</li>
+				</ul>
+				<p><code>isOpen()</code> will return <code>true</code> as promise only when the state is &quot;open&quot;.</p>
+				<p><a name="isClosed"></a></p>
+				<a href="#codedbisclosedcode" id="codedbisclosedcode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.isClosed()</code></h3>
+				</a>
+				<p><code>isClosed()</code> will return <code>true</code> as promise only when the state is &quot;closing&quot; <em>or</em> &quot;closed&quot;, it can be useful for determining if read and write operations are permissible.</p>
+				<p><a name="createReadStream"></a></p>
+				<a href="#codedbcreatereadstreamoptionscode" id="codedbcreatereadstreamoptionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.createReadStream([options])</code></h3>
+				</a>
+				<p>Returns a <a href="https://nodejs.org/docs/latest/api/stream.html#stream_readable_streams">Readable Stream</a> of key-value pairs. A pair is an object with <code>key</code> and <code>value</code> properties. By default it will stream all entries in the underlying store from start to end. Use the options described below to control the range, direction and results.</p>
+				<pre><code class="language-js">db.createReadStream()
+  .on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(data.key, <span class="hljs-string">'='</span>, data.value)
+  })
+  .on(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Oh my!'</span>, err)
+  })
+  .on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Stream closed'</span>)
+  })
+  .on(<span class="hljs-string">'end'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Stream ended'</span>)
+  })</code></pre>
+				<p>You can supply an options object as the first parameter to <code>createReadStream()</code> with the following properties:</p>
+				<ul>
+					<li><p><code>gt</code> (greater than), <code>gte</code> (greater than or equal) define the lower bound of the range to be streamed. Only entries where the key is greater than (or equal to) this option will be included in the range. When <code>reverse=true</code> the order will be reversed, but the entries streamed will be the same.</p>
+					</li>
+					<li><p><code>lt</code> (less than), <code>lte</code> (less than or equal) define the higher bound of the range to be streamed. Only entries where the key is less than (or equal to) this option will be included in the range. When <code>reverse=true</code> the order will be reversed, but the entries streamed will be the same.</p>
+					</li>
+					<li><p><code>reverse</code> <em>(boolean, default: <code>false</code>)</em>: stream entries in reverse order. Beware that due to the way that stores like LevelDB work, a reverse seek can be slower than a forward seek.</p>
+					</li>
+					<li><p><code>limit</code> <em>(number, default: <code>-1</code>)</em>: limit the number of entries collected by this stream. This number represents a <em>maximum</em> number of entries and may not be reached if you get to the end of the range first. A value of <code>-1</code> means there is no limit. When <code>reverse=true</code> the entries with the highest keys will be returned instead of the lowest keys.</p>
+					</li>
+					<li><p><code>keys</code> <em>(boolean, default: <code>true</code>)</em>: whether the results should contain keys. If set to <code>true</code> and <code>values</code> set to <code>false</code> then results will simply be keys, rather than objects with a <code>key</code> property. Used internally by the <code>createKeyStream()</code> method.</p>
+					</li>
+					<li><p><code>values</code> <em>(boolean, default: <code>true</code>)</em>: whether the results should contain values. If set to <code>true</code> and <code>keys</code> set to <code>false</code> then results will simply be values, rather than objects with a <code>value</code> property. Used internally by the <code>createValueStream()</code> method.</p>
+					</li>
+				</ul>
+				<p>Legacy options:</p>
+				<ul>
+					<li><p><code>start</code>: instead use <code>gte</code></p>
+					</li>
+					<li><p><code>end</code>: instead use <code>lte</code></p>
+					</li>
+				</ul>
+				<p>Underlying stores may have additional options.</p>
+				<p><a name="createKeyStream"></a></p>
+				<a href="#codedbcreatekeystreamoptionscode" id="codedbcreatekeystreamoptionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.createKeyStream([options])</code></h3>
+				</a>
+				<p>Returns a <a href="https://nodejs.org/docs/latest/api/stream.html#stream_readable_streams">Readable Stream</a> of keys rather than key-value pairs. Use the same options as described for <a href="#createReadStream"><code>createReadStream</code></a> to control the range and direction.</p>
+				<p>You can also obtain this stream by passing an options object to <code>createReadStream()</code> with <code>keys</code> set to <code>true</code> and <code>values</code> set to <code>false</code>. The result is equivalent; both streams operate in <a href="https://nodejs.org/docs/latest/api/stream.html#stream_object_mode">object mode</a>.</p>
+				<pre><code class="language-js">db.createKeyStream()
+  .on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'key='</span>, data)
+  })
+
+<span class="hljs-comment">// same as:</span>
+db.createReadStream({ <span class="hljs-attr">keys</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">values</span>: <span class="hljs-literal">false</span> })
+  .on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'key='</span>, data)
+  })</code></pre>
+				<p><a name="createValueStream"></a></p>
+				<a href="#codedbcreatevaluestreamoptionscode" id="codedbcreatevaluestreamoptionscode" style="color: inherit; text-decoration: none;">
+					<h3><code>db.createValueStream([options])</code></h3>
+				</a>
+				<p>Returns a <a href="https://nodejs.org/docs/latest/api/stream.html#stream_readable_streams">Readable Stream</a> of values rather than key-value pairs. Use the same options as described for <a href="#createReadStream"><code>createReadStream</code></a> to control the range and direction.</p>
+				<p>You can also obtain this stream by passing an options object to <code>createReadStream()</code> with <code>values</code> set to <code>true</code> and <code>keys</code> set to <code>false</code>. The result is equivalent; both streams operate in <a href="https://nodejs.org/docs/latest/api/stream.html#stream_object_mode">object mode</a>.</p>
+				<pre><code class="language-js">db.createValueStream()
+  .on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'value='</span>, data)
+  })
+
+<span class="hljs-comment">// same as:</span>
+db.createReadStream({ <span class="hljs-attr">keys</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">values</span>: <span class="hljs-literal">true</span> })
+  .on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'value='</span>, data)
+  })</code></pre>
+				<a href="#author" id="author" style="color: inherit; text-decoration: none;">
+					<h2>Author</h2>
+				</a>
+				<ul>
+					<li><strong>Vassilis Kritharakis</strong> - <em>Initial work</em> - <a href="https://github.com/bkrith">bkrith</a></li>
+				</ul>
+				<a href="#licenses" id="licenses" style="color: inherit; text-decoration: none;">
+					<h2>Licenses</h2>
+				</a>
+				<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_binary_.html">&quot;binary&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_interfaces_.html">&quot;interfaces&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_multilevel_.html">&quot;multilevel&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_stream_.html">&quot;stream&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
