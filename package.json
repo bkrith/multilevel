@@ -1,6 +1,6 @@
 {
   "name": "@bkrith/multilevel",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "server/client implementation for levelDB database",
   "main": "index.js",
   "keywords": [

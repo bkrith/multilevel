@@ -221,7 +221,7 @@ export class MultiLevel extends EventEmitter {
 
             this.once(packet.id, (result, err) => {
                 // Non exist Key returns error
-                if (err) resolve(false);
+                if (err) reject(false);
                 else resolve(result);
             });
         });
